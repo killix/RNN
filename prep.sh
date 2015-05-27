@@ -1,0 +1,20 @@
+#!/bin/bash -e
+LC_ALL=C gsed "s/^M//g" \
+| LC_ALL=C tr '\n' ' ' \
+| LC_ALL=C gsed "s/\t/ /g" \
+| LC_ALL=C gsed "s/(\([^()]*\))/\n\1\n/g" \
+| LC_ALL=C gsed "s/\"\([^\"]*\)\"/\n\1\n/g" \
+| LC_ALL=C gsed "s/\'\([^\']*\)\"/\n\1\n/g" \
+| LC_ALL=C gsed "s/\[[^][]*\]//g" \
+| LC_ALL=C gsed "s/[,:\/\' ]/ /g" \
+| LC_ALL=C gsed "s/[\?\!\.;]/\n/g" \
+| LC_ALL=C gsed "s/[^a-zA-Z0-9 ]/ /g" \
+| LC_ALL=C gsed "s/./\L&/g" \
+| LC_ALL=C gsed "s/ [ ]*/ /g" \
+| LC_ALL=C gsed "s/^[ \t]*//g" \
+| LC_ALL=C gsed "s/[\t ]*$//g" \
+| LC_ALL=C gsed "/^$/d" \
+| LC_ALL=C gsed "/^[^ ]*$/d" \
+| LC_ALL=C gsed "s/[^[:print:]]//g" \
+| LC_ALL=C gsed "s/^/<s> /" \
+| LC_ALL=C gsed "s/$/ <\/s>/"
