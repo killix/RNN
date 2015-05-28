@@ -274,6 +274,16 @@ if __name__ == '__main__':
                 #print(predictions_valid)
                 #print('\n')
                 #print(groundtruth_valid)
+                count = 0
+                right = 0
+                for p in range(len(predictions_valid)):
+                    for q in range(len(predictions_valid[p])):
+                        count += 1
+                        if predictions_valid[p][q] == groundtruth_valid[p][q]:
+                            right += 1
+
+                print(right / count)
+
 
                 if res_valid['f1'] > best_f1:
                     rnn.save(folder)
