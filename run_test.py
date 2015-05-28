@@ -130,9 +130,21 @@ if __name__ == '__main__':
                 labels.append(word2labelindx["XXXXX"])
             termss.append(term)
 
+        # add a PADDING-END word at the rightend (the last word in the sentence)
+        labels.append(word2labelindx["</s>"])
+        # remove a PADDING_START word at the begining.
+        labels.pop(0)
+
         cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
         prediction_test = rnn.test(numpy.asarray(cwords).astype('float32'))
-        test_question_probs.append(prediction_test)
+
+        prediction_test2 = []
+
+        for term_indx in range(len(labels)):
+            prediction_test2.append(prediction_test[term_indx, labels[term_indx]])
+
+        #test_question_probs.append(prediction_test)
+        test_question_probs.append(prediction_test2)
         for probs in prediction_test:
             print(','.join([str(p) for p in probs]), end=',')
         print('')

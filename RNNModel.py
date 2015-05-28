@@ -23,6 +23,12 @@ class RNNModel(object):
         # parameters of the model
         #
 
+        self.nh = nh
+        self.nc = nc
+        self.ne = ne
+        self.de = de
+        self.cs = cs
+
         # add one for PADDING at the end
         #self.emb = theano.shared(0.2 * numpy.random.uniform(-1.0, 1.0, (ne + 1, de)).astype(theano.config.floatX))
         #self.emb = gensim.models.Word2Vec.load_word2vec_format('vectors.bin', binary=True)
@@ -83,7 +89,7 @@ class RNNModel(object):
 
         init_param_pth = os.path.join(folder, 'rnn_init.params')
         with open(init_param_pth, 'w') as f:
-            for param in [nh, nc, ne, de, cs]:
+            for param in [self.nh, self.nc, self.ne, self.de, self.cs]:
                 print(param, file=f)
 
     def load(self, folder):
