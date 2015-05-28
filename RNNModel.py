@@ -42,10 +42,12 @@ class RNNModel(object):
         self.h0 = theano.shared(numpy.zeros(nh, dtype=theano.config.floatX))
 
         # bundle
-        self.params = [self.emb, self.Wx, self.Wh, self.W, self.bh, self.b, self.h0]
+        #self.params = [self.emb, self.Wx, self.Wh, self.W, self.bh, self.b, self.h0]
+        self.params = [self.Wx, self.Wh, self.W, self.bh, self.b, self.h0]
         self.names = ['embeddings', 'Wx', 'Wh', 'W', 'bh', 'b', 'h0']
-        idxs = T.imatrix()  # as many columns as context window size/lines as words in the sentence
-        x = self.emb[idxs].reshape((idxs.shape[0], de * cs))
+        idxs = T.ftensor3()  # as many columns as context window size/lines as words in the sentence
+        #self.x = self.emb[idxs].reshape((idxs.shape[0], de * cs))
+        self.x = idxs.reshape((idxs.shape[0], de * cs))
         y = T.iscalar('y')  # label
 
         # x_t:   the input at time t
@@ -56,7 +58,7 @@ class RNNModel(object):
             s_t = T.nnet.softmax(T.dot(h_t, self.W) + self.b)
             return [h_t, s_t]
 
-        [h, s], _ = theano.scan(fn=recurrence, sequences=x, outputs_info=[self.h0, None], n_steps=x.shape[0])
+        [h, s], _ = theano.scan(fn=recurrence, sequences=self.x, outputs_info=[self.h0, None], n_steps=self.x.shape[0])
 
         p_y_given_x_lastword = s[-1, 0, :]
         p_y_given_x_sentence = s[:, 0, :]

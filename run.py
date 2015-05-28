@@ -9,6 +9,7 @@ import random
 import functools
 import gensim
 import re
+import logging
 
 import load
 import RNNModel
@@ -25,7 +26,7 @@ if __name__ == '__main__':
          'bs': 9, # number of backprop through time steps
          'nhidden':1000, # number of hidden units
          'seed': 1976,
-         'emb_dimension': 100, # dimension of word embedding
+         'emb_dimension': 200, # dimension of word embedding
          'nepochs': 50}
 
     folder = os.path.basename(__file__).split('.')[0]
@@ -36,8 +37,9 @@ if __name__ == '__main__':
 
     # load the training dataset
     train_data = list()
-    valid_data = list()
     test_data = list()
+
+
 
     # parse each question's 5 possible answers `[...]` from test data
     setTestLabels = set()
@@ -87,10 +89,10 @@ if __name__ == '__main__':
         train_data.append(sentence)
 
     # 1-5000 sentences are for validation
-    valid_data = train_data[1:5000]
+    valid_data = train_data[1:len(train_data) // 2]
 
     # 5001- sentences are for training
-    train_data = test_data[5001:]
+    train_data = train_data[(len(train_data) // 2 + 1):len(train_data)]
 
     vocsize = len(model.vocab)
     nclasses = len(labelindx2word)
@@ -104,11 +106,9 @@ if __name__ == '__main__':
     train_set, valid_set, test_set, dic = load.atisfold(s['fold'])
     idx2label = dict((k, v) for v, k in dic['labels2idx'].items())
     idx2word  = dict((k, v) for v, k in dic['words2idx'].items())
-
     train_lex, train_ne, train_y = train_set
     valid_lex, valid_ne, valid_y = valid_set
     test_lex, test_ne, test_y  = test_set
-
     vocsize = len(set(functools.reduce(lambda x, y: list(x) + list(y), train_lex + valid_lex + test_lex)))
     nclasses = len(set(functools.reduce(lambda x, y: list(x) + list(y), train_y + test_y + valid_y)))
     nsentences = len(train_lex)
@@ -125,7 +125,6 @@ if __name__ == '__main__':
     ne :: number of word embeddings in the vocabulary
     de :: dimension of the word embeddings
     cs :: word window context size
-
     ce :: current epoch no
     """
 
@@ -160,8 +159,7 @@ if __name__ == '__main__':
                     except KeyError:
                         # if the term still can't be found in the model,
                         # explicitly use the feat. vec of 'some'
-                        logging.warning("Can't find term %s in word2vec model" %
-                                        term)
+                        #logging.warning("Can't find term %s in word2vec model" %term)
                         x_fvec.append(model['some'])
 
                 # map word to label_index
@@ -173,7 +171,7 @@ if __name__ == '__main__':
                     labels.append(word2labelindx["XXXXX"])
 
             # add a PADDING-END word at the rightend (the last word in the sentence)
-            labels.append(model["</s>"])
+            labels.append(word2labelindx["</s>"])
             # remove a PADDING_START word at the begining.
             labels.pop(0)
             #  --- end modified ---
@@ -181,7 +179,7 @@ if __name__ == '__main__':
             #cwords = contextwin(train_lex[i], s['win'])
             cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
 
-            words  = map(lambda x: numpy.asarray(x).astype('int32'), minibatch(cwords, s['bs']))
+            words  = map(lambda x: numpy.asarray(x).astype('float32'), minibatch(cwords, s['bs']))
             #labels = train_y[i]
 
 
@@ -199,7 +197,6 @@ if __name__ == '__main__':
                              for x in test_lex ]
         groundtruth_test = [ map(lambda x: idx2label[x], y) for y in test_y ]
         words_test = [ map(lambda x: idx2word[x], w) for w in test_lex]
-
         predictions_valid = [ map(lambda x: idx2label[x], \
                              rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
                              for x in valid_lex ]
@@ -248,7 +245,8 @@ if __name__ == '__main__':
 
         #cwords = contextwin(train_lex[i], s['win'])
         cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
-        predictions_valid.append(rnn.classify(numpy.asarray(cwords)))
+        a = numpy.asarray(cwords)
+        predictions_valid.append(rnn.classify(numpy.asarray(cwords).astype('float32')))
 
         # add a PADDING-END word at the rightend (the last word in the sentence)
         labels.append(model["</s>"])
