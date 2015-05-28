@@ -59,9 +59,11 @@ if __name__ == '__main__':
     word2labelindx = dict()
     label_indx = 0
 
-    for x in setTestLabels:
-        labelindx2word[label_indx] = x
-        word2labelindx[x] = label_indx
+    # add test labels as word
+    # TODO: make the test labels stable (sort?)
+    for label in setTestLabels:
+        labelindx2word[label_indx] = label
+        word2labelindx[label] = label_indx
         label_indx += 1
 
 
