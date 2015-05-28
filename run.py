@@ -154,10 +154,10 @@ if __name__ == '__main__':
                     # not a label
                     labels.append(word2labelindx["XXXXX"])
                 
-                # add a PADDING-END word at the rightend (the last word in the sentence)
-                labels.append(model["</s>"])
-                # remove a PADDING_START word at the begining.
-                labels.remove(0)
+            # add a PADDING-END word at the rightend (the last word in the sentence)
+            labels.append(model["</s>"])
+            # remove a PADDING_START word at the begining.
+            labels.remove(0)
             #  --- end modified ---
 
             #cwords = contextwin(train_lex[i], s['win'])
