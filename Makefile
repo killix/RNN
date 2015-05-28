@@ -1,4 +1,5 @@
-all : 
+all : vectors.bin
+	python3 run.py
 
 training.txt : training.txt.zip
 	md5sum --check training.txt.md5 || unzip $<
