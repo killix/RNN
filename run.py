@@ -31,6 +31,7 @@ if __name__ == '__main__':
     folder = os.path.basename(__file__).split('.')[0]
     if not os.path.exists(folder): os.mkdir(folder)
 
+    # model feature dim has 200
     model = gensim.models.Word2Vec.load_word2vec_format('vectors.bin', binary=True)
 
     # load the training dataset
@@ -38,6 +39,7 @@ if __name__ == '__main__':
     valid_data = list()
     test_data = list()
 
+    # parse each question's 5 possible answers `[...]` from test data
     setTestLabels = set()
     f_test = open('testing.txt', 'r')
     for line in f_test:
@@ -46,6 +48,9 @@ if __name__ == '__main__':
             label_word = match_obj.group()
             setTestLabels.add(label_word[4:-5])
 
+    # label:
+    # labelindx:
+    # vec:
     label2vec = dict()
     vec2label = dict()
     labelindx2word = dict()
@@ -116,6 +121,8 @@ if __name__ == '__main__':
     ne :: number of word embeddings in the vocabulary
     de :: dimension of the word embeddings
     cs :: word window context size
+
+    ce :: current epoch no
     """
 
     rnn = RNNModel.RNNModel(nh=s['nhidden'],
