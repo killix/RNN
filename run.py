@@ -132,7 +132,7 @@ if __name__ == '__main__':
                             nc=nclasses,
                             ne=vocsize,
                             de=s['emb_dimension'],
-                            cs=7)
+                            cs=s['win'])
 
     # train with early stopping on validation set
     best_f1 = -numpy.inf
