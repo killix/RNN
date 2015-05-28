@@ -5,7 +5,7 @@
 - Ubuntu 14.04
 - python3
 - svn
-- GNU make
+- build-essentials
 
 ```sh
 sudo pip install theano gensim pickle
