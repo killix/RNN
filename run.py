@@ -232,7 +232,7 @@ if __name__ == '__main__':
                 words_valid = []
 
                 #for j in range(len(valid_data)):
-                for j in range(50):  # train_lex[i]:
+                for j in range(500):  # train_lex[i]:
 
                     x_fvec = []  # x's feature vector of a sentence
                     labels = []  # label list of a sentence
