@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
             for word_batch, label_last_word in zip(words, labels):
                 rnn.train(word_batch, label_last_word, s['clr'])
-                print()
+                #print()
                 #rnn.normalize()
             if s['verbose']:
                 print('[learning] epoch %i >> %2.2f%%'%(e,(i+1)*100./nsentences),'completed in %.2f (sec) <<\r'%(time.time()-tic),)
