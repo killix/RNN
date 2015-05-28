@@ -72,7 +72,7 @@ class RNNModel(object):
 
         # theano functions
         self.classify = theano.function(inputs=[idxs], outputs=y_pred)
-
+        self.test = theano.function(inputs=[idxs], outputs=p_y_given_x_sentence)
         self.train = theano.function(inputs=[idxs, y, lr], outputs=nll, updates=updates)
 
         #self.normalize = theano.function(inputs=[], updates={self.emb: self.emb / T.sqrt((self.emb ** 2).sum(axis=1)).dimshuffle(0, 'x')})
@@ -80,6 +80,11 @@ class RNNModel(object):
     def save(self, folder):
         for param, name in zip(self.params, self.names):
             numpy.save(os.path.join(folder, name + '.npy'), param.get_value())
+
+        init_param_pth = os.path.join(folder, 'rnn_init.params')
+        with open(init_param_pth, 'w') as f:
+            for param in [nh, nc, ne, de, cs]:
+                print(param, file=f)
 
     def load(self, folder):
         for name in self.names:

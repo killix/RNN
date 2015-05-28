@@ -105,11 +105,11 @@ if __name__ == '__main__':
                 list(answer_option.rstrip().split(' '))
             )
     # loop by question
+    test_question_probs = []
     for answer_option in test_questions:
         x_fvec = []
         labels = []
         termss = []
-        prediction_test = []
         for term in answer_option:
             # convert word to feature vector
             if term in model:
@@ -130,5 +130,9 @@ if __name__ == '__main__':
                 labels.append(word2labelindx["XXXXX"])
             termss.append(term)
 
-            cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
-            predictions_test.append(rnn.test(numpy.asarray(cwords).astype('float32')))
+        cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
+        prediction_test = rnn.test(numpy.asarray(cwords).astype('float32'))
+        test_question_probs.append(prediction_test)
+        for probs in prediction_test:
+            print(','.join([str(p) for p in probs]), end=',')
+        print('')
