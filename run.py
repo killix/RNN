@@ -232,6 +232,7 @@ if __name__ == '__main__':
 	    labels.append(model["</s>"])
 	    # remove a PADDING_START word at the begining.
 	    labels.remove(0)
+	    groundtruth_valid.append(labels)
 
         # evaluation // compute the accuracy using conlleval.pl
         #res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
