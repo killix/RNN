@@ -42,11 +42,13 @@ if __name__ == '__main__':
     # parse each question's 5 possible answers `[...]` from test data
     setTestLabels = set()
     f_test = open('testing.txt', 'r')
+    extract_test_answer_option = re.compile(r'\[(\w+)\]').search
     for line in f_test:
-        match_obj = re.search(r"\[.*\]", line)
+        # match_obj = re.search(r"\[.*\]", line)
+        match_obj = extract_test_answer_option(line)
         if match_obj:
-            label_word = match_obj.group()
-            setTestLabels.add(label_word[4:-5])
+            label_word = match_obj.group(1)
+            setTestLabels.add(label_word)
 
     # label:
     # labelindx:
