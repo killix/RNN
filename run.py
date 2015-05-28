@@ -278,7 +278,7 @@ if __name__ == '__main__':
             #subprocess.call(['mv', folder + '/current.test.txt', folder + '/best.test.txt'])
             subprocess.call(['mv', folder + '/current.valid.txt', folder + '/best.valid.txt'])
         else:
-            print('')
+            # print('')
 
 
         # learning rate decay if no improvement in 10 epochs
