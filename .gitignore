@@ -1,0 +1,7 @@
+training.txt
+trunk
+vectors.bin
+__pycache__
+*.pyc
+py3env/
+

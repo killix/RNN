@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # 5001- sentences are for training
     train_data = test_data[5001:]
 
-    vocsize = len(model)
+    vocsize = len(model.vocab)
     nclasses = len(labelindx2word)
     nsentences = len(train_data)
 
@@ -187,19 +187,20 @@ if __name__ == '__main__':
         predictions_test = [ map(lambda x: labelindx2word[x], \
                              rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
                              for x in test_data ]
-        groundtruth_test = [ map(lambda x: labelindx2word[x], y) for y in test_y ]
+        #groundtruth_test = [ map(lambda x: labelindx2word[x], y) for y in test_y ]
         words_test = [ map(lambda x: idx2word[x], w) for w in test_data]
 
-        predictions_valid = [ map(lambda x: labelindx2word[x], \
-                             rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
-                             for x in valid_data ]
-        groundtruth_valid = [ map(lambda x: labelindx2word[x], y) for y in valid_y ]
-        words_valid = [ map(lambda x: idx2word[x], w) for w in valid_data]
+        #predictions_valid = [ map(lambda x: labelindx2word[x], \
+        #                     rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
+        #                     for x in valid_data ]
+        #groundtruth_valid = [ map(lambda x: labelindx2word[x], y) for y in valid_y ]
+        #words_valid = [ map(lambda x: idx2word[x], w) for w in valid_data]
 
         # evaluation // compute the accuracy using conlleval.pl
-        res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
-        res_valid = conlleval(predictions_valid, groundtruth_valid, words_valid, folder + '/current.valid.txt')
+        #res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
+        #res_valid = conlleval(predictions_valid, groundtruth_valid, words_valid, folder + '/current.valid.txt')
 
+        '''
         if res_valid['f1'] > best_f1:
             rnn.save(folder)
             best_f1 = res_valid['f1']
@@ -212,9 +213,10 @@ if __name__ == '__main__':
             subprocess.call(['mv', folder + '/current.valid.txt', folder + '/best.valid.txt'])
         else:
             print ('')
+        '''
 
         # learning rate decay if no improvement in 10 epochs
         if s['decay'] and abs(s['be']-s['ce']) >= 10: s['clr'] *= 0.5
         if s['clr'] < 1e-5: break
 
-    print('BEST RESULT: epoch', e, 'valid F1', s['vf1'], 'best test F1', s['tf1'], 'with the model', folder)
+    #print('BEST RESULT: epoch', e, 'valid F1', s['vf1'], 'best test F1', s['tf1'], 'with the model', folder)
