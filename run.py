@@ -161,8 +161,7 @@ if __name__ == '__main__':
             #  --- end modified ---
 
             #cwords = contextwin(train_lex[i], s['win'])
-            cwords = contextwin(x_fvec[i], s['win'], model["<s>"], model["</s>"])
-
+            cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
 
             words  = map(lambda x: numpy.asarray(x).astype('int32'), minibatch(cwords, s['bs']))
             #labels = train_y[i]
@@ -226,7 +225,7 @@ if __name__ == '__main__':
                     labels.append(word2labelindx["XXXXX"])
 	      
 	    #cwords = contextwin(train_lex[i], s['win'])
-	    cwords = contextwin(x_fvec[i], s['win'], model["<s>"], model["</s>"])
+	    cwords = contextwin(x_fvec, s['win'], model["<s>"], model["</s>"])
             predictions_valid.append(rnn.classify(numpy.asarray(cwords)))
 			
 	    # add a PADDING-END word at the rightend (the last word in the sentence)
