@@ -154,7 +154,7 @@ if __name__ == '__main__':
             #  --- start modified ---
             x_fvec = [] # x's feature vector of a sentence
             labels = [] # label list of a sentence
-            for term in train_data[i]: #train_lex[i]:
+            for term in train_data[i].strip('\n').split(' '): #train_lex[i]:
                 # convert word to feature vector
                 if term in model:
                     x_fvec.append(model[term])
