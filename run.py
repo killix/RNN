@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
 
     for sentence in f_train:
-        train_data.append(sentence)
+        train_data.append(sentence.rstrip())
 
     # 1-5000 sentences are for validation
     valid_data = train_data[1:len(train_data) // 2]
