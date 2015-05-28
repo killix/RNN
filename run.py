@@ -138,7 +138,7 @@ if __name__ == '__main__':
                             nc=nclasses,
                             ne=vocsize,
                             de=s['emb_dimension'],
-                            cs=s['win'])
+                            cs=7)
 
     # train with early stopping on validation set
     best_f1 = -numpy.inf
@@ -260,24 +260,26 @@ if __name__ == '__main__':
         # remove a PADDING_START word at the begining.
         labels.pop(0)
 
+        words_valid = labels
+
         # evaluation // compute the accuracy using conlleval.pl
         #res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
-        #res_valid = conlleval(predictions_valid, groundtruth_valid, words_valid, folder + '/current.valid.txt')
+        res_valid = conlleval(predictions_valid, groundtruth_valid, words_valid, folder + '/current.valid.txt')
 
-        '''
+
         if res_valid['f1'] > best_f1:
             rnn.save(folder)
             best_f1 = res_valid['f1']
             if s['verbose']:
-                print ('NEW BEST: epoch', e, 'valid F1', res_valid['f1'], 'best test F1', res_test['f1'], ' '*20)
+                print('NEW BEST: epoch', e, 'valid F1', res_valid['f1'], ' ' * 20)
             s['vf1'], s['vp'], s['vr'] = res_valid['f1'], res_valid['p'], res_valid['r']
-            s['tf1'], s['tp'], s['tr'] = res_test['f1'],  res_test['p'],  res_test['r']
+            #s['tf1'], s['tp'], s['tr'] = res_test['f1'],  res_test['p'],  res_test['r']
             s['be'] = e
-            subprocess.call(['mv', folder + '/current.test.txt', folder + '/best.test.txt'])
+            #subprocess.call(['mv', folder + '/current.test.txt', folder + '/best.test.txt'])
             subprocess.call(['mv', folder + '/current.valid.txt', folder + '/best.valid.txt'])
         else:
-            print ('')
-        '''
+            print('')
+
 
         # learning rate decay if no improvement in 10 epochs
         if s['decay'] and abs(s['be']-s['ce']) >= 10: s['clr'] *= 0.5
