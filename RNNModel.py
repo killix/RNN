@@ -24,7 +24,7 @@ class RNNModel(object):
         #
 
         # add one for PADDING at the end
-        #self.emb = theano.shared(0.2 * numpy.random.uniform(-1.0, 1.0, (ne + 1, de)).astype(theano.config.floatX))
+        self.emb = theano.shared(0.2 * numpy.random.uniform(-1.0, 1.0, (ne + 1, de)).astype(theano.config.floatX))
         #self.emb = gensim.models.Word2Vec.load_word2vec_format('vectors.bin', binary=True)
 
         # parameters for the input layer
