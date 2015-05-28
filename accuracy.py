@@ -29,10 +29,10 @@ def conlleval(p, g, w, filename):
     for sl, sp, sw in zip(g, p, w):
         out += 'BOS O O\n'
         for wl, wp, w in zip(sl, sp, sw):
-            out += w + ' ' + wl + ' ' + wp + '\n'
+            out += str(w) + ' ' + str(wl) + ' ' + str(wp) + '\n'
         out += 'EOS O O\n\n'
 
-    f = open(filename,'w')
+    f = open(filename, 'w')
     f.writelines(out)
     f.close()
     
@@ -47,7 +47,7 @@ def get_perf(filename):
         chmod('conlleval.pl', stat.S_IRWXU) # give the execute permissions
 
     proc = subprocess.Popen(["perl", _conlleval], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    stdout, _ = proc.communicate(open(filename).read())
+    stdout, _ = proc.communicate(open(filename).read().encode('utf-8'))
 
     encoding = locale.getdefaultlocale()[1]
 
