@@ -95,10 +95,10 @@ if __name__ == '__main__':
         train_data.append(sentence.rstrip())
 
     # 1-5000 sentences are for validation
-    valid_data = train_data[1:len(train_data) // 10]
+    valid_data = train_data[:len(train_data) // 10]
 
     # 5001- sentences are for training
-    train_data = train_data[(len(train_data) // 10 + 1):len(train_data)]
+    train_data = train_data[len(train_data) // 10:]
 
     vocsize = len(model.vocab)
     nclasses = len(labelindx2word)
