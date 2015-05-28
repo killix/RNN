@@ -211,7 +211,7 @@ if __name__ == '__main__':
                              rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
                              for x in test_data ]
         #groundtruth_test = [ map(lambda x: labelindx2word[x], y) for y in test_y ]
-        words_test = [ map(lambda x: idx2word[x], w) for w in test_data]
+        #words_test = [ map(lambda x: idx2word[x], w) for w in test_data]
 
         #predictions_valid = [ map(lambda x: labelindx2word[x], \
         #                     rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
@@ -222,10 +222,10 @@ if __name__ == '__main__':
         predictions_valid = []
         groundtruth_valid = []
 
-        for i in range(len(valid_data)):#train_lex[i]:
+        for i in range(len(valid_data)):  # train_lex[i]:
 
-            x_fvec = [] # x's feature vector of a sentence
-            labels = [] # label list of a sentence
+            x_fvec = []  # x's feature vector of a sentence
+            labels = []  # label list of a sentence
 
             for term in valid_data[i]:
                 # convert word to feature vector
