@@ -25,10 +25,10 @@ if __name__ == '__main__':
          'decay': False, # decay on the learning rate if improvement stops
          'win': 7, # number of words in the context window
          'bs': 9, # number of backprop through time steps
-         'nhidden':1000, # number of hidden units
+         'nhidden': 1000, # number of hidden units
          'seed': 1976,
          'emb_dimension': 200, # dimension of word embedding
-         'nepochs': 50}
+         'nepochs': 2}
 
     folder = os.path.basename(__file__).split('.')[0]
     if not os.path.exists(folder): os.mkdir(folder)
