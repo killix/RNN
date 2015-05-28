@@ -10,6 +10,7 @@ import functools
 import gensim
 import re
 import logging
+import theano
 
 import load
 import RNNModel
@@ -47,6 +48,11 @@ if __name__ == '__main__':
     extract_test_answer_option = re.compile(r'\[(\w+)\]').search
     for line in f_test:
         # match_obj = re.search(r"\[.*\]", line)
+        lines = line.strip('\n')[4:].split(' ')
+        for word in lines:
+            if word.isalnum():
+                setTestLabels.add(word)
+
         match_obj = extract_test_answer_option(line)
         if match_obj:
             label_word = match_obj.group(1)
@@ -82,7 +88,7 @@ if __name__ == '__main__':
     word2labelindx["XXXXX"] = label_indx+2
 
 
-    f_train = open('try_it.txt', 'r')
+    f_train = open('training.txt', 'r')
 
 
     for sentence in f_train:
@@ -185,6 +191,7 @@ if __name__ == '__main__':
 
             for word_batch, label_last_word in zip(words, labels):
                 rnn.train(word_batch, label_last_word, s['clr'])
+                print()
                 #rnn.normalize()
             if s['verbose']:
                 print('[learning] epoch %i >> %2.2f%%'%(e,(i+1)*100./nsentences),'completed in %.2f (sec) <<\r'%(time.time()-tic),)
