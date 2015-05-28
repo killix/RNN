@@ -157,7 +157,7 @@ if __name__ == '__main__':
             # add a PADDING-END word at the rightend (the last word in the sentence)
             labels.append(model["</s>"])
             # remove a PADDING_START word at the begining.
-            labels.remove(0)
+            labels.pop(0)
             #  --- end modified ---
 
             #cwords = contextwin(train_lex[i], s['win'])
@@ -231,7 +231,7 @@ if __name__ == '__main__':
 	    # add a PADDING-END word at the rightend (the last word in the sentence)
 	    labels.append(model["</s>"])
 	    # remove a PADDING_START word at the begining.
-	    labels.remove(0)
+	    labels.pop(0)
 	    groundtruth_valid.append(labels)
 
         # evaluation // compute the accuracy using conlleval.pl
