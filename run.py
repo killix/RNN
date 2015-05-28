@@ -60,15 +60,15 @@ if __name__ == '__main__':
 
     # start word
     labelindx2word[label_indx] = "<s>"
-    labelindx2word["<s>"] = label_indx
+    word2labelindx["<s>"] = label_indx
 
     # start word
     labelindx2word[label_indx+1] = "</s>"
-    labelindx2word["</s>"] = label_indx+1
+    word2labelindx["</s>"] = label_indx+1
 
     # other word
     labelindx2word[label_indx+2] = "XXXXXX"
-    labelindx2word["XXXXX"] = label_indx+2
+    word2labelindx["XXXXX"] = label_indx+2
 
 
     f_train = open('try_it.txt', 'r')
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             # add a PADDING-END word at the rightend (the last word in the sentence)
             labels.append(model["</s>"])
             # remove a PADDING_START word at the begining.
-            labels.remove(0)
+            labels.pop(0)
             #  --- end modified ---
 
             #cwords = contextwin(train_lex[i], s['win'])
@@ -231,8 +231,7 @@ if __name__ == '__main__':
         # add a PADDING-END word at the rightend (the last word in the sentence)
         labels.append(model["</s>"])
         # remove a PADDING_START word at the begining.
-        labels.remove(0)
-        groundtruth_valid.append(labels)
+        labels.pop(0)
 
         # evaluation // compute the accuracy using conlleval.pl
         #res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
