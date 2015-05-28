@@ -31,7 +31,11 @@ if __name__ == '__main__':
          'nepochs': 50}
 
     folder = os.path.basename(__file__).split('.')[0]
-    if not os.path.exists(folder): os.mkdir(folder)
+    best_folder = 'best_' + folder
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+    if not os.path.exists(best_folder):
+        os.mkdir(best_folder)
 
     # model feature dim has 200
     model = gensim.models.Word2Vec.load_word2vec_format('vectors.bin', binary=True)
@@ -284,9 +288,8 @@ if __name__ == '__main__':
 
                 print(right / count)
 
-
                 if res_valid['f1'] > best_f1:
-                    rnn.save(folder)
+                    rnn.save(best_folder)
                     best_f1 = res_valid['f1']
                     if s['verbose']:
                         print('NEW BEST: epoch', e, 'valid F1', res_valid['f1'], ' ' * 20)
@@ -294,10 +297,9 @@ if __name__ == '__main__':
                     #s['tf1'], s['tp'], s['tr'] = res_test['f1'],  res_test['p'],  res_test['r']
                     s['be'] = e
                     #subprocess.call(['mv', folder + '/current.test.txt', folder + '/best.test.txt'])
-                    subprocess.call(['mv', folder + '/current.valid.txt', folder + '/best.valid.txt'])
+                    subprocess.call(['mv', folder + '/current.valid.txt', best_folder + '/best.valid.txt'])
                 else:
-                    print('')
-
+                    rnn.save(folder)
 
                 # learning rate decay if no improvement in 10 epochs
                 if s['decay'] and abs(s['be']-s['ce']) >= 10: s['clr'] *= 0.5

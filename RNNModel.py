@@ -44,7 +44,7 @@ class RNNModel(object):
         # bundle
         #self.params = [self.emb, self.Wx, self.Wh, self.W, self.bh, self.b, self.h0]
         self.params = [self.Wx, self.Wh, self.W, self.bh, self.b, self.h0]
-        self.names = ['embeddings', 'Wx', 'Wh', 'W', 'bh', 'b', 'h0']
+        self.names = ['Wx', 'Wh', 'W', 'bh', 'b', 'h0']
         idxs = T.ftensor3()  # as many columns as context window size/lines as words in the sentence
         #self.x = self.emb[idxs].reshape((idxs.shape[0], de * cs))
         self.x = idxs.reshape((idxs.shape[0], de * cs))
@@ -80,3 +80,7 @@ class RNNModel(object):
     def save(self, folder):
         for param, name in zip(self.params, self.names):
             numpy.save(os.path.join(folder, name + '.npy'), param.get_value())
+
+    def load(self, folder):
+        for name in self.names:
+            self.__dict__[name] = numpy.load(os.path.join(folder, name + '.npy'))
