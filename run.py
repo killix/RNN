@@ -153,6 +153,11 @@ if __name__ == '__main__':
                 else:
                     # not a label
                     labels.append(word2labelindx["XXXXX"])
+                
+                # add a PADDING-END word at the rightend (the last word in the sentence)
+                labels.append(model["</s>"])
+                # remove a PADDING_START word at the begining.
+                labels.remove(0)
             #  --- end modified ---
 
             #cwords = contextwin(train_lex[i], s['win'])
@@ -184,6 +189,7 @@ if __name__ == '__main__':
         groundtruth_valid = [ map(lambda x: idx2label[x], y) for y in valid_y ]
         words_valid = [ map(lambda x: idx2word[x], w) for w in valid_lex]
         """
+        
         predictions_test = [ map(lambda x: labelindx2word[x], \
                              rnn.classify(numpy.asarray(contextwin(x, s['win'])).astype('int32')))\
                              for x in test_data ]
@@ -195,6 +201,33 @@ if __name__ == '__main__':
         #                     for x in valid_data ]
         #groundtruth_valid = [ map(lambda x: labelindx2word[x], y) for y in valid_y ]
         #words_valid = [ map(lambda x: idx2word[x], w) for w in valid_data]
+        
+        predictions_valid = []
+        groundtruth_valid = []
+        
+        for term in valid_data[i]:#train_lex[i]:
+            # convert word to feature vector
+            if term in model:
+                x_fvec.append(model[term])
+            else:
+                # for instance: 'good-humoured' ==> 'good'
+                x_fvec.append(model[term.split('-')[0]])
+            # map word to label_index
+            if term in word2labelindx:
+                # is label
+                labels.append(word2labelindx[term])
+            else:
+                # not a label
+                labels.append(word2labelindx["XXXXX"])
+        #  --- end modified ---
+        #cwords = contextwin(train_lex[i], s['win'])
+        cwords = contextwin(x_fvec[i], s['win'], model["<s>"], model["</s>"])
+		predictions_valid.append(rnn.classify(numpy.asarray(cwords)))
+		
+		# add a PADDING-END word at the rightend (the last word in the sentence)
+		labels.append(model["</s>"])
+		# remove a PADDING_START word at the begining.
+		labels.remove(0)
 
         # evaluation // compute the accuracy using conlleval.pl
         #res_test  = conlleval(predictions_test, groundtruth_test, words_test, folder + '/current.test.txt')
