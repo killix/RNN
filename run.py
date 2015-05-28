@@ -60,15 +60,15 @@ if __name__ == '__main__':
 
     # start word
     labelindx2word[label_indx] = "<s>"
-    labelindx2word["<s>"] = label_indx
+    word2labelindx["<s>"] = label_indx
 
     # start word
     labelindx2word[label_indx+1] = "</s>"
-    labelindx2word["</s>"] = label_indx+1
+    word2labelindx["</s>"] = label_indx+1
 
     # other word
     labelindx2word[label_indx+2] = "XXXXXX"
-    labelindx2word["XXXXX"] = label_indx+2
+    word2labelindx["XXXXX"] = label_indx+2
 
 
     f_train = open('try_it.txt', 'r')
