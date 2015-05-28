@@ -8,6 +8,7 @@ import subprocess
 from os.path import isfile, join
 from os import chmod
 from load import download
+import locale
 
 PREFIX = os.getenv('ATISDATA', '')
 
@@ -47,14 +48,22 @@ def get_perf(filename):
 
     proc = subprocess.Popen(["perl", _conlleval], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     stdout, _ = proc.communicate(open(filename).read())
-    for line in stdout.split('\n'):
+
+    encoding = locale.getdefaultlocale()[1]
+
+    out = []
+    for line in stdout.decode(encoding).split('\n'):
         if 'accuracy' in line:
             out = line.split()
             break
-    
-    precision = float(out[6][:-2])
-    recall    = float(out[8][:-2])
-    f1score   = float(out[10])
+    precision = 0
+    recall = 0
+    f1score = 0
+
+    if len(out) > 0:
+        precision = float(out[6][:-2])
+        recall    = float(out[8][:-2])
+        f1score   = float(out[10])
 
     return {'p':precision, 'r':recall, 'f1':f1score}
 
