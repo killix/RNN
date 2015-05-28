@@ -149,13 +149,20 @@ if __name__ == '__main__':
             #  --- start modified ---
             x_fvec = [] # x's feature vector of a sentence
             labels = [] # label list of a sentence
-            for term in train_data[i]:#train_lex[i]:
+            for term in train_data[i]: #train_lex[i]:
                 # convert word to feature vector
                 if term in model:
                     x_fvec.append(model[term])
                 else:
                     # for instance: 'good-humoured' ==> 'good'
-                    x_fvec.append(model[term.split('-')[0]])
+                    try:
+                        x_fvec.append(model[term.split('-')[0]])
+                    except KeyError:
+                        # if the term still can't be found in the model,
+                        # explicitly use the feat. vec of 'some'
+                        logging.warning("Can't find term %s in word2vec model" %
+                                        term)
+                        x_fvec.append(model['some'])
 
                 # map word to label_index
                 if term in word2labelindx:
@@ -226,7 +233,11 @@ if __name__ == '__main__':
                     x_fvec.append(model[term])
                 else:
                     # for instance: 'good-humoured' ==> 'good'
-                    x_fvec.append(model[term.split('-')[0]])
+                    try:
+                        x_fvec.append(model[term.split('-')[0]])
+                    except KeyError:
+                        # same hack as in the training process
+                        x_fvec.append(model['some'])
                 # map word to label_index
                 if term in word2labelindx:
                     # is label
