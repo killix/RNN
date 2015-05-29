@@ -145,6 +145,4 @@ if __name__ == '__main__':
 
         #test_question_probs.append(prediction_test)
         test_question_probs.append(prediction_test2)
-        for probs in prediction_test:
-            print(','.join([str(p) for p in probs]), end=',')
-        print('')
+        print(','.join([str(p) for p in prediction_test2]))
